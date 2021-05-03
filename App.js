@@ -4,6 +4,21 @@ import {Button} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 
 export default class App extends Component {
+  selectGalleryImage() {
+    const options = {};
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User Cancelled Image');
+      } else if (response.error) {
+        console.log('Error encountered');
+      } else if (response.customButton) {
+        console.log('User pressed Custom Button');
+      } else {
+        console.log('Opened Library')
+      }
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -12,14 +27,17 @@ export default class App extends Component {
           <Text style={styles.subtitle}>Python Neural Network</Text>
         </View>
         <View style={styles.outputContainer}>
-          <Image source={require('./assets/gems3.png')} style={styles.gemsImage}></Image>
+          <Image
+            source={require('./assets/gems3.png')}
+            style={styles.gemsImage}></Image>
         </View>
         <View style={styles.buttonContainer}>
           <Button
             title="Camera Roll"
             buttonStyle={styles.button}
             containerStyle={{margin: 5}}
-            titleStyle={{fontSize: 20}}></Button>
+            titleStyle={{fontSize: 20}}
+            onPress={this.selectGalleryImage.bind(this)}></Button>
           <Button
             title="Take a Photo"
             buttonStyle={styles.button}
@@ -67,6 +85,6 @@ const styles = StyleSheet.create({
   gemsImage: {
     width: 570,
     height: 350,
-    resizeMode: 'stretch'
-  }
+    resizeMode: 'stretch',
+  },
 });
