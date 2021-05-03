@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
+import ImagePicker from 'react-native-image-picker';
 
 export default class App extends Component {
   render() {
@@ -11,7 +12,7 @@ export default class App extends Component {
           <Text style={styles.subtitle}>Python Neural Network</Text>
         </View>
         <View style={styles.outputContainer}>
-          <Text>Output</Text>
+          <Image source={require('./assets/gems3.png')} style={styles.gemsImage}></Image>
         </View>
         <View style={styles.buttonContainer}>
           <Button
@@ -63,4 +64,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     borderRadius: 8,
   },
+  gemsImage: {
+    width: 570,
+    height: 350,
+    resizeMode: 'stretch'
+  }
 });
