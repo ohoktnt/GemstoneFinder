@@ -5,23 +5,23 @@ import {Button} from 'react-native-elements';
 export default class App extends Component {
   render() {
     return (
-      <View>
-        <View>
-          <Text>Find Gemstone</Text>
-          <Text>Python Neural Network</Text>
+      <View style={styles.container}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Find Gemstone</Text>
+          <Text style={styles.subtitle}>Python Neural Network</Text>
         </View>
-        <View>
+        <View style={styles.outputContainer}>
           <Text>Output</Text>
         </View>
-        <View>
+        <View style={styles.buttonContainer}>
           <Button
             title="Camera Roll"
-            style={styles.button}
+            buttonStyle={styles.button}
             containerStyle={{margin: 5}}
             titleStyle={{fontSize: 20}}></Button>
           <Button
             title="Take a Photo"
-            style={styles.button}
+            buttonStyle={styles.button}
             containerStyle={{margin: 5}}
             titleStyle={{fontSize: 20}}></Button>
         </View>
@@ -30,4 +30,37 @@ export default class App extends Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#a061fe',
+  },
+  titleContainer: {
+    marginTop: 70,
+    marginLeft: 40,
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  subtitle: {
+    color: 'white',
+    fontSize: 16,
+  },
+  outputContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    paddingBottom: 40,
+    alignItems: 'center',
+  },
+  button: {
+    width: 200,
+    height: 57,
+    backgroundColor: 'black',
+    borderRadius: 8,
+  },
+});
