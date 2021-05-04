@@ -2,8 +2,31 @@ import React, {Component} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
+import Tflite from 'tflite-react-native';
+
+let tflite = new Tflite();
+var modelFile = 'models/model.tflite';
+var labelsFile = 'models/labels.txt';
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      recognitions: null,
+      source: null,
+    };
+    tflite.loadModel(
+      {
+        model: modelFile,
+        labels: labelsFile,
+      },
+      (err, res) => {
+        if (err) console.log(err);
+        else console.log(res);
+      },
+    );
+  }
+
   selectGalleryImage() {
     const options = {};
     ImagePicker.launchImageLibrary(options, response => {
@@ -14,7 +37,7 @@ export default class App extends Component {
       } else if (response.customButton) {
         console.log('User pressed Custom Button');
       } else {
-        console.log('Opened Library')
+        console.log('Opened Library');
       }
     });
   }
