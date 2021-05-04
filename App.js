@@ -62,7 +62,44 @@ export default class App extends Component {
     });
   }
 
+  takeImage() {
+    const options = {};
+    ImagePicker.launchCamera(options, response => {
+      if (response.didCancel) {
+        console.log('User Cancelled Image');
+      } else if (response.error) {
+        console.log('Error encountered');
+      } else if (response.customButton) {
+        console.log('User pressed Custom Button');
+      } else {
+        console.log('Opened Library');
+        this.setState({
+          source: {uri: response.uri},
+        });
+
+        tflite.runModelOnImage(
+          {
+            path: response.path,
+            imageMean: 128,
+            imageStd: 128,
+            numResults: 50,
+            threshold: 0.5,
+          },
+          (err, res) => {
+            if (err) console.log(err);
+            else {
+              console.log(res[res.length - 1]);
+              this.setState({recognitions: res[res.length - 1]});
+            }
+          },
+        );
+      }
+    });
+  }
+
   render() {
+    const {recognitions, source} = this.state;
+
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
@@ -70,9 +107,29 @@ export default class App extends Component {
           <Text style={styles.subtitle}>Python Neural Network</Text>
         </View>
         <View style={styles.outputContainer}>
-          <Image
-            source={require('./assets/gems3.png')}
-            style={styles.gemsImage}></Image>
+          {recognitions ? (
+            <View>
+              {<Image source={source} style={styles.outputImage}></Image>}
+              {
+                <Text
+                  style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    paddingTop: 10,
+                    fontSize: 25,
+                  }}>
+                  {recognitions['label'] +
+                    ' - ' +
+                    (recognitions['confidence'] * 100).toFixed(0) +
+                    '%'}
+                </Text>
+              }
+            </View>
+          ) : (
+            <Image
+              source={require('./assets/gems3.png')}
+              style={styles.gemsImage}></Image>
+          )}
         </View>
         <View style={styles.buttonContainer}>
           <Button
@@ -85,7 +142,8 @@ export default class App extends Component {
             title="Take a Photo"
             buttonStyle={styles.button}
             containerStyle={{margin: 5}}
-            titleStyle={{fontSize: 20}}></Button>
+            titleStyle={{fontSize: 20}}
+            onPress={this.takeImage.bind(this)}></Button>
         </View>
       </View>
     );
@@ -130,4 +188,8 @@ const styles = StyleSheet.create({
     height: 350,
     resizeMode: 'stretch',
   },
+  outputImage: {
+    width: 250,
+    height: 250
+  }
 });
