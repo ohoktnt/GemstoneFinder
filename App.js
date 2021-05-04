@@ -38,6 +38,26 @@ export default class App extends Component {
         console.log('User pressed Custom Button');
       } else {
         console.log('Opened Library');
+        this.setState({
+          source: {uri: response.uri},
+        });
+
+        tflite.runModelOnImage(
+          {
+            path: response.path,
+            imageMean: 128,
+            imageStd: 128,
+            numResults: 50,
+            threshold: 0.5,
+          },
+          (err, res) => {
+            if (err) console.log(err);
+            else {
+              console.log(res[res.length - 1]);
+              this.setState({recognitions: res[res.length - 1]});
+            }
+          },
+        );
       }
     });
   }
